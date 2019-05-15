@@ -24,6 +24,3 @@ text = ''.join(random.choices(string.ascii_letters + string.digits + string.punc
 
 with open(path, 'w') as file:
     file.write(text)
-
-
-print("File generated")
