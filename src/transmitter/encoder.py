@@ -3,8 +3,13 @@ import numpy as np
 
 
 def to_binary(text):
-    """Converts the text to a binary numpy array
-    E.g.: a -> 0b1100001 -> ['1' '1' '0' '0' '0' '0' '1']
+    """Converts the text to a binary numpy array (where the 0 bits is -1)
+    E.g., ab becomes
+    [   
+        [ 1  1 -1 -1 -1 -1  1]
+        [ 1  1 -1 -1 -1  1 -1]
+    ]
+
     """
     binary = []
 
@@ -18,7 +23,7 @@ def to_binary(text):
     
     binary = np.array(binary)
     binary[binary == 0] = -1
-
+    print(binary)
     return binary
 
 def convolutional_encoder(source):
