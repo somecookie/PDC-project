@@ -23,7 +23,6 @@ def to_binary(text):
     
     binary = np.array(binary)
     binary[binary == 0] = -1
-    print(binary)
     return binary
 
 def convolutional_encoder(source):
@@ -54,6 +53,7 @@ def get_codeword(symbols):
 
 def encode(text):
     """Encode the given text"""
+    assert len(text) > 0
     binary = to_binary(text)
     binary = get_codeword(binary)
     return binary
