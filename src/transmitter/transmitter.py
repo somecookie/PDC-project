@@ -1,6 +1,14 @@
 import argparse
 import pathlib
 import encoder
+import waveformer
+import numpy as np
+import matplotlib.pyplot as plt
+
+t_sample=1/22050
+nbr_sample=1000
+step = 2*t_sample/nbr_sample
+beta=0.01
 
 def parse_args():
     """Parse the arguments of the main"""
@@ -21,3 +29,10 @@ if __name__ == "__main__":
         text = file.read()
         
     codewords = encoder.encode(text)
+    waves = waveformer.form(codewords)
+
+    for i in range(14):
+        x = np.arange(-t_sample, t_sample, step)-i*t_sample
+        data = waves[i*nbr_sample:(i+1)*nbr_sample]
+        plt.plot(x, data)
+    plt.show()
