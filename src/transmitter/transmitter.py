@@ -28,7 +28,7 @@ if __name__ == "__main__":
     waves = waveformer.form(codewords)
 
     basis = waveformer.get_basis(14)
-    for i in range(14):
-        data = waves[waveformer.nbr_sample*i:waveformer.nbr_sample*(i+1)]
+    for i in range(codewords.shape[0]):
+        data = waves[i]
         plt.plot(waveformer.ts, data)
     plt.show()

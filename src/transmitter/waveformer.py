@@ -42,10 +42,16 @@ def form(codewords):
     basis = get_basis(n)
     waves = np.zeros(nbr_sample)
     for i in range(codewords.shape[0]):
+        # cw = codewords[i]
+        # cw = cw.reshape((-1, 1))*basis
+        # cw = cw.flatten()
+        # waves = np.hstack((waves, cw))
+
         cw = codewords[i]
-        cw = cw.reshape((-1,1))*basis
-        cw = cw.flatten()
-        waves = np.hstack((waves, cw))
-    
-    return waves[nbr_sample:].flatten()
+        cw = cw.reshape((-1, 1))*basis
+        cw = np.sum(cw, axis=0)
+        waves.append(cw)
+
+    return np.array(waves)
+    #return waves[nbr_sample:].flatten()
 
