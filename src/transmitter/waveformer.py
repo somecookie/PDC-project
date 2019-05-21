@@ -5,9 +5,14 @@ from math import sqrt
 import numpy as np
 
 t_sample=1/22050
-nbr_sample=1000
-step = 2*t_sample/nbr_sample
+nbr_sample=100
+start = -2*t_sample
+end = 15*t_sample
+step = (end - start)/nbr_sample
 beta=0.5
+ts = np.arange(start, end, step)
+if len(ts) != nbr_sample:
+        ts = ts[:nbr_sample]
 
 def root_raised_cosine(t):
     num = cos((1+beta)*pi*(t/t_sample)) + ((1-beta)*pi*sinc(t*(1-beta)/t_sample))/(4*beta)
@@ -21,10 +26,9 @@ def sinc(x):
     return sin(pi*x)/(pi*x)
 
 def sample(j):
-    times = np.arange(-t_sample, t_sample, step)-j*t_sample
     f = np.vectorize(root_raised_cosine)
-    times = f(times)
-    return times
+    return f(ts - j*t_sample)
+    
 
 def get_basis(n):
     basis = sample(0)
