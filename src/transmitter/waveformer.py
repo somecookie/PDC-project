@@ -1,51 +1,86 @@
-from math import cos
-from math import pi
-from math import sin
-from math import sqrt
+import utils.pulse as pulse
 import numpy as np
 
-t_sample=1/22050
-nbr_sample=100
-start = -2*t_sample
-end = 15*t_sample
-step = (end - start)/nbr_sample
-beta=0.5
-ts = np.arange(start, end, step)
-if len(ts) != nbr_sample:
-        ts = ts[:nbr_sample]
 
-def root_raised_cosine(t):
-    num = cos((1+beta)*pi*(t/t_sample)) + ((1-beta)*pi*sinc(t*(1-beta)/t_sample))/(4*beta)
-    denom = 1-(4*beta*t/t_sample)**2
-    coeff = (4*beta)/(pi*sqrt(t_sample))
-    return coeff*num/denom
+class Waveformer:
+    """
+    This class implements the waveform former of the transmitter
+    """
 
-def sinc(x):
-    if x == 0:
-        return 1
-    return sin(pi*x)/(pi*x)
+    def __init__(self, codewords, t_sample=1/22050, nbr_sample=100, beta=0.5):
+        """
+        Constructor for the waveform former
 
-def sample(j):
-    f = np.vectorize(root_raised_cosine)
-    return f(ts - j*t_sample)
-    
+        :param codewords: the codewords we sending
+        :param t_sample: the sampling period
+        :param nbr_sample: the amount of samples we want when we discretize the basis
+        :param beta: the beta parameter for the root-raised cosine
+        """
+        
+        self.codewords = codewords
+        self.n = codewords.shape[1]
+        self.beta = beta
+        
+        self.t_sample = t_sample
+        self.nbr_sample = nbr_sample
 
-def get_basis(n):
-    basis = sample(0)
-    for j in range(1,n):
-        basis = np.vstack((basis, sample(j)))
-    
-    return basis
+        self.start = -2*t_sample
+        self.end = (self.n+1)*t_sample
+        self.step = (self.end - self.start)/nbr_sample
 
-def form(codewords):
-    n = len(codewords[0])
-    basis = get_basis(n)
-    waves = np.zeros(nbr_sample)
-    for i in range(codewords.shape[0]):
-        cw = codewords[i]
-        cw = cw.reshape((-1,1))*basis
-        cw = cw.flatten()
-        waves = np.hstack((waves, cw))
-    
-    return waves[nbr_sample:].flatten()
+        self.ts = np.arange(self.start, self.end, self.step)
+        if len(self.ts) != nbr_sample:
+            self.ts = self.ts[:nbr_sample]
+        
 
+
+    def discretize(self, j):
+        """
+        Discretize the root-raised cosine shifted by j*t_sample to the right
+
+        :param j: shift to the right
+        """
+
+        f = np.vectorize(pulse.root_raised_cosine)
+        return f(self.ts - j*self.t_sample, self.t_sample, self.beta)
+
+
+    def get_basis(self):
+        """
+        Construct the basis of dimension self.n
+        """
+
+        basis = self.discretize(0)
+        for j in range(1, self.n):
+            basis = np.vstack((basis, self.discretize(j)))
+
+        return basis
+
+
+    def get_w(self, summation=True):
+        """
+        Build the discretized form of the waveform signal that the transmitter will send
+
+        :param summation: boolean that indicates if we want the sum of the version of the signal
+        """
+        basis = self.get_basis()
+        if summation:
+            
+            waves = []
+            for i in range(self.codewords.shape[0]):
+                cw = self.codewords[i]
+                cw = cw.reshape((-1, 1))*basis
+                cw = np.sum(cw, axis=0)
+                waves.append(cw)
+
+            return np.array(waves)
+        else:
+            
+            waves = np.zeros(self.nbr_sample)
+            for i in range(self.codewords.shape[0]):
+                cw = self.codewords[i]
+                cw = cw.reshape((-1,1))*basis
+                cw = cw.flatten()
+                waves = np.hstack((waves, cw))
+            
+            return waves[self.nbr_sample:].flatten()
