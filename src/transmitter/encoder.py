@@ -2,7 +2,17 @@ import binascii
 import numpy as np
 
 class Encoder:
+    """
+    This class implements the encoder of transmitter
+    """
+
     def __init__(self,text):
+        """
+        Constructor of the encoder
+
+        :param text: the text in ascii format we want to encode
+        """
+
         assert len(text) > 0
         self.text = text
 
@@ -32,7 +42,10 @@ class Encoder:
         return binary
 
     def convolutional_encoder(self,source):
-        """Implements the convolutional encoder for one symbol"""
+        """Implements the convolutional encoder for one symbol
+        
+        :param source: the binary representation of the source symbol we want to transform using the convolutional encoder
+        """
         source = source.flatten()
         k = source.shape[0]
 
@@ -53,12 +66,15 @@ class Encoder:
 
 
     def get_codewords(self,symbols):
-        """Converts the binary source symbols into the corresponding codeword using a convolutional encoder (see page 206)"""
+        """Converts the binary source symbols into the corresponding codeword using a convolutional encoder (see page 206)
+        
+        :param symbols: the binary source symbols for each character of the text
+        """
         return np.apply_along_axis(self.convolutional_encoder,1,symbols)
         
 
     def encode(self):
-        """Encode the given text"""
+        """Encode the given text using a convolutional encoder"""
         binary = self.to_binary()
         binary = self.get_codewords(binary)
         return binary
