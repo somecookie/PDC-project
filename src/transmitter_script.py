@@ -1,6 +1,6 @@
 import argparse
 import pathlib
-import transmitter.encoder as encoder
+from transmitter.encoder import Encoder
 from transmitter.waveformer import Waveformer
 import numpy as np
 import matplotlib.pyplot as plt
@@ -23,8 +23,9 @@ if __name__ == "__main__":
     
     with open(args.i, "r") as file:
         text = file.read()
-        
-    codewords = encoder.encode(text)
+
+    enc = Encoder(text) 
+    codewords = enc.encode()
     wf = Waveformer(codewords)
     waves = wf.get_w()
 
