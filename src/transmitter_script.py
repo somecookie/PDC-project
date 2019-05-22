@@ -1,7 +1,7 @@
 import argparse
 import pathlib
 import transmitter.encoder as encoder
-import transmitter.waveformer as waveformer
+from transmitter.waveformer import Waveformer
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -25,10 +25,10 @@ if __name__ == "__main__":
         text = file.read()
         
     codewords = encoder.encode(text)
-    waves = waveformer.form(codewords)
+    wf = Waveformer(codewords)
+    waves = wf.get_w()
 
-    basis = waveformer.get_basis(14)
     for i in range(codewords.shape[0]):
         data = waves[i]
-        plt.plot(waveformer.ts, data)
+        plt.plot(wf.ts, data)
     plt.show()
