@@ -1,7 +1,7 @@
 import argparse
 import pathlib
-import encoder
-import waveformer
+import transmitter.encoder as encoder
+import transmitter.waveformer as waveformer
 import numpy as np
 import matplotlib.pyplot as plt
 

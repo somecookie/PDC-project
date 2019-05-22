@@ -1,7 +1,4 @@
-from math import cos
-from math import pi
-from math import sin
-from math import sqrt
+import utils.pulse as pulse
 import numpy as np
 
 t_sample=1/22050
@@ -14,20 +11,11 @@ ts = np.arange(start, end, step)
 if len(ts) != nbr_sample:
         ts = ts[:nbr_sample]
 
-def root_raised_cosine(t):
-    num = cos((1+beta)*pi*(t/t_sample)) + ((1-beta)*pi*sinc(t*(1-beta)/t_sample))/(4*beta)
-    denom = 1-(4*beta*t/t_sample)**2
-    coeff = (4*beta)/(pi*sqrt(t_sample))
-    return coeff*num/denom
 
-def sinc(x):
-    if x == 0:
-        return 1
-    return sin(pi*x)/(pi*x)
 
 def sample(j):
-    f = np.vectorize(root_raised_cosine)
-    return f(ts - j*t_sample)
+    f = np.vectorize(pulse.root_raised_cosine)
+    return f(ts - j*t_sample, t_sample, beta)
     
 
 def get_basis(n):
@@ -40,7 +28,7 @@ def get_basis(n):
 def form(codewords):
     n = len(codewords[0])
     basis = get_basis(n)
-    waves = np.zeros(nbr_sample)
+    waves = []
     for i in range(codewords.shape[0]):
         # cw = codewords[i]
         # cw = cw.reshape((-1, 1))*basis
