@@ -11,6 +11,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Produces the codewords from the given text file")
     parser.add_argument('-i', type=str, required=True, help='path to the intput .txt file')
     parser.add_argument('-o', type=str, required=True, help='path to the output .txt file')
+    parser.add_argument('-d',type=bool, nargs='?', default=False, help='enable debug mode')
+    parser.add_argument('-ns',type=bool, nargs='?', default=False, help='enable no summation')
 
     args = parser.parse_args()
 
@@ -32,11 +34,15 @@ if __name__ == "__main__":
     It takes the following arguments:
     -i: the input file
     -o: the output file
+    [-d]: enable debug mode
+    [-ns]: to indicate no summation
     """ 
 
-    summation = False
+    
 
     args = parse_args()
+
+    summation = True if args.ns is not None else args.ns
     
     with open(args.i, "r") as file:
         text = file.read()
@@ -44,16 +50,16 @@ if __name__ == "__main__":
     enc = Encoder(text) 
     codewords = enc.encode()
     wf = Waveformer(codewords)
-    waves = wf.get_w(False)
+    waves = wf.get_w(summation)
 
     np.savetxt(args.o, waves.flatten())
     
-    if summation:
+    if args.d is None and summation:
         for i in range(codewords.shape[0]):
             data = waves[i]
             plt.plot(wf.ts, data)
         plt.show()
-    else:
+    elif args.d is None:
         for i in range(codewords.shape[1]):
             data = waves[i*wf.nbr_sample: (i+1)*wf.nbr_sample]
             plt.plot(wf.ts, data)
