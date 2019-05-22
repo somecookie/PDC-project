@@ -57,17 +57,30 @@ class Waveformer:
         return basis
 
 
-    def get_w(self):
+    def get_w(self, summation=True):
         """
         Build the discretized form of the waveform signal that the transmitter will send
+
+        :param summation: boolean that indicates if we want the sum of the version of the signal
         """
-
         basis = self.get_basis()
-        waves = []
-        for i in range(self.codewords.shape[0]):
-            cw = self.codewords[i]
-            cw = cw.reshape((-1, 1))*basis
-            cw = np.sum(cw, axis=0)
-            waves.append(cw)
+        if summation:
+            
+            waves = []
+            for i in range(self.codewords.shape[0]):
+                cw = self.codewords[i]
+                cw = cw.reshape((-1, 1))*basis
+                cw = np.sum(cw, axis=0)
+                waves.append(cw)
 
-        return np.array(waves)
+            return np.array(waves)
+        else:
+            
+            waves = np.zeros(self.nbr_sample)
+            for i in range(self.codewords.shape[0]):
+                cw = self.codewords[i]
+                cw = cw.reshape((-1,1))*basis
+                cw = cw.flatten()
+                waves = np.hstack((waves, cw))
+            
+            return waves[self.nbr_sample:].flatten()

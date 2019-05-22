@@ -33,6 +33,9 @@ if __name__ == "__main__":
     -i: the input file
     -o: the output file
     """ 
+
+    summation = False
+
     args = parse_args()
     
     with open(args.i, "r") as file:
@@ -41,11 +44,17 @@ if __name__ == "__main__":
     enc = Encoder(text) 
     codewords = enc.encode()
     wf = Waveformer(codewords)
-    waves = wf.get_w()
+    waves = wf.get_w(False)
 
     np.savetxt(args.o, waves.flatten())
-
-    for i in range(codewords.shape[0]):
-        data = waves[i]
-        plt.plot(wf.ts, data)
-    plt.show()
+    
+    if summation:
+        for i in range(codewords.shape[0]):
+            data = waves[i]
+            plt.plot(wf.ts, data)
+        plt.show()
+    else:
+        for i in range(codewords.shape[1]):
+            data = waves[i*wf.nbr_sample: (i+1)*wf.nbr_sample]
+            plt.plot(wf.ts, data)
+        plt.show()
