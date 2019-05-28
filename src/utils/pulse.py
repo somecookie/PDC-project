@@ -3,13 +3,10 @@ from math import pi
 from math import sin
 from math import sqrt
 
-def root_raised_cosine(t, t_interval, beta):
-    ##Added by Gonxhe
-    assert T > 0    
-    
-    num = cos((1+beta)*pi*(t/t_interval)) + ((1-beta)*pi*sinc(t*(1-beta)/t_interval))/(4*beta)
-    denom = 1-(4*beta*t/t_interval)**2
-    coeff = (4*beta)/(pi*sqrt(t_interval))
+def root_raised_cosine(t, t_sample, beta):
+    num = cos((1+beta)*pi*(t/t_sample)) + ((1-beta)*pi*sinc(t*(1-beta)/t_sample))/(4*beta)
+    denom = 1-(4*beta*t/t_sample)**2
+    coeff = (4*beta)/(pi*sqrt(t_sample))
     return coeff*num/denom
 
 def sinc(x):

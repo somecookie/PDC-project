@@ -64,7 +64,6 @@ class Waveformer:
         :param summation: boolean that indicates if we want the sum of the version of the signal
         """
         basis = self.get_basis()
-
         if summation:
             
             waves = []
@@ -73,6 +72,7 @@ class Waveformer:
                 cw = cw.reshape((-1, 1))*basis
                 cw = np.sum(cw, axis=0)
                 waves.append(cw)
+
             return np.array(waves)
         else:
             
@@ -82,16 +82,17 @@ class Waveformer:
                 cw = cw.reshape((-1,1))*basis
                 cw = cw.flatten()
                 waves = np.hstack((waves, cw))
+            
             return waves[self.nbr_sample:].flatten()
-
-        ##Added by Gonxhe
-        def random_binary_signal(wave):
+        
+    ##Added by Gonxhe
+    def random_binary_signal(wave):
         """
         Creates random signal of length 1/4 of the signal we want to send. 
         These signals will be added in the beginning and in the end of the signal we want to send.
 
         :param wave: the signal of bits we want to send
         """
-        sig = np.array([rnd.randint(0,1) for x in range(len(wave)/4)])
+        sig = np.array([np.random.randint(0,1) for x in range(len(wave)/4)])
         sig[sig == 0] = -1
         return sig

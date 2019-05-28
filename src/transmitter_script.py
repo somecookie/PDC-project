@@ -49,23 +49,11 @@ if __name__ == "__main__":
 
     enc = Encoder(text) 
     codewords = enc.encode()
-    rand1 = enc.encode_random_signal()
-    rand2 = enc.encode_random_signal()
-
     wf = Waveformer(codewords)
-    wf1 = Waveformer(rand1)
-    wf2 = Waveformer(rand2)
     waves = wf.get_w(summation)
-    waves1 = wf1.get_w(summation)
-    waves2 = wf2.get_w(summation)
 
-    wave = np.append(waves1, waves)
-    wave = np.append(wave, waves2)
-
-    np.savetxt(args.o, wave.flatten())
-
-
-    ##Need to be updated
+    np.savetxt(args.o, waves.flatten())
+    
     if args.d is None and summation:
         for i in range(codewords.shape[0]):
             data = waves[i]
