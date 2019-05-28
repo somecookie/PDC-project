@@ -22,15 +22,15 @@ class Waveformer:
         self.beta = beta
         
         self.t_sample = t_sample
-        self.nbr_sample = nbr_sample
+        #self.nbr_sample = nbr_sample
 
         self.start = -2*t_sample
         self.end = (self.n+1)*t_sample
-        self.step = (self.end - self.start)/nbr_sample
+        #self.step = (self.end - self.start)/nbr_sample
+        self.step = t_sample
 
         self.ts = np.arange(self.start, self.end, self.step)
-        if len(self.ts) != nbr_sample:
-            self.ts = self.ts[:nbr_sample]
+        self.nbr_sample = len(self.ts)
         
 
 
@@ -84,15 +84,3 @@ class Waveformer:
                 waves = np.hstack((waves, cw))
             
             return waves[self.nbr_sample:].flatten()
-        
-    ##Added by Gonxhe
-    def random_binary_signal(wave):
-        """
-        Creates random signal of length 1/4 of the signal we want to send. 
-        These signals will be added in the beginning and in the end of the signal we want to send.
-
-        :param wave: the signal of bits we want to send
-        """
-        sig = np.array([np.random.randint(0,1) for x in range(len(wave)/4)])
-        sig[sig == 0] = -1
-        return sig

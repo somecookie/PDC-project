@@ -3,7 +3,7 @@
 echo "Start of the debug script"
 
 echo "Generation of the text file"
-python utils/generate_text.py -n 160 -o resources/text.txt
+python utils/generate_text.py -n 1 -o resources/text.txt
 
 echo "Encoding and formation of the signal"
 python transmitter_script.py -i resources/text.txt -o resources/signal.txt -d
