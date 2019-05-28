@@ -22,15 +22,15 @@ class Waveformer:
         self.beta = beta
         
         self.t_sample = t_sample
-        self.nbr_sample = nbr_sample
+        #self.nbr_sample = nbr_sample
 
         self.start = -2*t_sample
         self.end = (self.n+1)*t_sample
-        self.step = (self.end - self.start)/nbr_sample
+        #self.step = (self.end - self.start)/nbr_sample
+        self.step = t_sample
 
         self.ts = np.arange(self.start, self.end, self.step)
-        if len(self.ts) != nbr_sample:
-            self.ts = self.ts[:nbr_sample]
+        self.nbr_sample = len(self.ts)
         
 
 

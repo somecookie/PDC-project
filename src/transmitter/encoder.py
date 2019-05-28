@@ -1,5 +1,6 @@
 import binascii
 import numpy as np
+import random as rnd
 
 class Encoder:
     """
@@ -77,4 +78,30 @@ class Encoder:
         """Encode the given text using a convolutional encoder"""
         binary = self.to_binary()
         binary = self.get_codewords(binary)
+        training_signal = self.encode_random_signal()
+        np.savetxt("resources/training.txt", training_signal)
+        binary = np.vstack((training_signal, binary, training_signal))
         return binary
+    
+     ##Added by Gonxhe
+    def encode_random_signal(self):
+        """Encode the random binary sequence using a convolutional encoder"""
+        rnd_binary = self.random_binary()
+        rnd_binary = self.get_codewords(rnd_binary.reshape((-1,7)))
+        return rnd_binary
+
+    ##Added by Gonxhe
+    def random_binary(self):
+        """
+        Creates random binary numpy array of certain length. 
+        These random texts will be added in the beginning and in the end of the true input we want to send.
+        """
+        random_binary = np.array([rnd.randint(0,1) for i in range(7)])
+        random_binary[random_binary == 0] = -1
+        ##We assume we need 25% of the length ot the true binary array in the beginning and in the end of our true binary array.
+        ##For each character of my 25% of the text file, I create random binary arrays of length 8.
+        for x in range(int(len(self.text)/4)-1):
+            sig = np.array([rnd.randint(0,1) for i in range(7)])
+            sig[sig == 0] = -1
+            random_binary = np.vstack([random_binary,sig])
+        return random_binary
