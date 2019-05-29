@@ -92,10 +92,10 @@ class Encoder:
         return barker
 
     def random_binary(self):
-    """
-    Creates random binary numpy array of certain length. 
-    These random texts will be added in the beginning and in the end of the true input we want to send.
-    """
+        """
+        Creates random binary numpy array of certain length. 
+        These random texts will be added in the beginning and in the end of the true input we want to send.
+        """
         random_binary = np.array([rnd.randint(0,1) for i in range(7)])
         random_binary[random_binary == 0] = -1
         ##We assume we need 25% of the length ot the true binary array in the beginning and in the end of our true binary array.
