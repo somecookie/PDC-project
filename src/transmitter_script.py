@@ -38,8 +38,6 @@ if __name__ == "__main__":
     [-ns]: to indicate no summation
     """ 
 
-    
-
     args = parse_args()
 
     summation = True if args.ns is not None else args.ns

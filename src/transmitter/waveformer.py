@@ -11,7 +11,7 @@ class Waveformer:
         """
         Constructor for the waveform former
 
-        :param codewords: the codewords we sending
+        :param codewords: the codewords we are sending
         :param t_sample: the sampling period
         :param nbr_sample: the amount of samples we want when we discretize the basis
         :param beta: the beta parameter for the root-raised cosine

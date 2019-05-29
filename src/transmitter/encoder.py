@@ -1,6 +1,5 @@
 import binascii
 import numpy as np
-import random as rnd
 
 class Encoder:
     """
@@ -64,8 +63,6 @@ class Encoder:
         xs[0] = tmp
         return xs
             
-
-
     def get_codewords(self,symbols):
         """Converts the binary source symbols into the corresponding codeword using a convolutional encoder (see page 206)
         
@@ -83,19 +80,22 @@ class Encoder:
         binary = np.vstack((training_signal, binary, training_signal))
         return binary
     
-     ##Added by Gonxhe
     def encode_random_signal(self):
         """Encode the random binary sequence using a convolutional encoder"""
-        rnd_binary = self.random_binary()
+        rnd_binary = self.barker_code()
         rnd_binary = self.get_codewords(rnd_binary.reshape((-1,7)))
         return rnd_binary
+    
+    def barker_code(self):
+        barker = np.array([1,1,1,-1,-1,1,-1])
+        barker = np.tile(barker, (int(len(self.text)/4), 1))
+        return barker
 
-    ##Added by Gonxhe
     def random_binary(self):
-        """
-        Creates random binary numpy array of certain length. 
-        These random texts will be added in the beginning and in the end of the true input we want to send.
-        """
+    """
+    Creates random binary numpy array of certain length. 
+    These random texts will be added in the beginning and in the end of the true input we want to send.
+    """
         random_binary = np.array([rnd.randint(0,1) for i in range(7)])
         random_binary[random_binary == 0] = -1
         ##We assume we need 25% of the length ot the true binary array in the beginning and in the end of our true binary array.

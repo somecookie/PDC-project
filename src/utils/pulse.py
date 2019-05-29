@@ -4,6 +4,7 @@ from math import sin
 from math import sqrt
 
 def root_raised_cosine(t, t_sample, beta):
+    assert t > 0
     num = cos((1+beta)*pi*(t/t_sample)) + ((1-beta)*pi*sinc(t*(1-beta)/t_sample))/(4*beta)
     denom = 1-(4*beta*t/t_sample)**2
     coeff = (4*beta)/(pi*sqrt(t_sample))
