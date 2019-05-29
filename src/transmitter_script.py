@@ -47,7 +47,6 @@ if __name__ == "__main__":
 
     enc = Encoder(text) 
     codewords = enc.encode()
-    print(codewords)
     wf = Waveformer(codewords)
     waves = wf.get_w(summation)
 

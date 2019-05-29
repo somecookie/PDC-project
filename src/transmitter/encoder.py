@@ -83,12 +83,14 @@ class Encoder:
     def encode_random_signal(self):
         """Encode the random binary sequence using a convolutional encoder"""
         rnd_binary = self.barker_code()
+        print(rnd_binary)
         rnd_binary = self.get_codewords(rnd_binary.reshape((-1,7)))
         return rnd_binary
     
     def barker_code(self):
         barker = np.array([1,1,1,-1,-1,1,-1])
-        barker = np.tile(barker, (int(len(self.text)/4), 1))
+        if int(len(self.text)/4) > 0:
+            barker = np.tile(barker, (int(len(self.text)/4), 1))
         return barker
 
     def random_binary(self):
